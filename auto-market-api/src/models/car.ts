@@ -31,10 +31,12 @@ const carSchema = new Schema<Car>({
     },
     fuelType: {
         type: String,
+        required: true,
         enum: ['Gasolina', 'Electrico', 'Diesel', 'Hibirido']
     },
     transmission: {
         type: String,
+        required: true,
         enum: ['Estandar', 'Automatico']
     },
     engineCapacity: {
@@ -44,12 +46,12 @@ const carSchema = new Schema<Car>({
     },    
     condition: {
         type: String,
+        required: true,
         enum: ['Excelente', 'Buena', 'Mala']
     },
     description: {
         type: String,
         trim: true
-        
     },
     image: {
         type: Buffer,
