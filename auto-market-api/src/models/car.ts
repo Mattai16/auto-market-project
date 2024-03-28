@@ -54,12 +54,10 @@ const carSchema = new Schema<Car>({
         trim: true
     },
     image: {
-        type: Buffer,
-        required: true
+        type: Buffer
     },
     imageType: {
-        type: String,
-        required: true
+        type: String
     },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
