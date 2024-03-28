@@ -21,8 +21,8 @@ export const registerUser = async (userName: string, email: string, password: st
             rol
         })
 
-        await newUser.save()
-        return newUser
+        const userSaved = await newUser.save()
+        return userSaved
 
     } catch (error : any) {
         return error.message

@@ -8,7 +8,7 @@ export const register = async (req: Request, res: Response) => {
 
         const newUser = await registerUser(userName, email, password, rol)
         console.log(newUser)
-
+        
 
         if(newUser.userName != undefined){
             res.status(200).json({
