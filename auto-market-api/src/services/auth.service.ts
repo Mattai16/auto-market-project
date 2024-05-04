@@ -1,7 +1,7 @@
-import bcrypt from 'bcryptjs'
 import User from "../models/user";
 import { ResponseContent } from '../utils/response.content';
 import { StatusCodes } from 'http-status-codes';
+import { generateHash } from '../utils/password.hash';
 
 export const registerUser = async (userName: string, email: string, password: string, rol: string) => {
 
@@ -10,13 +10,7 @@ export const registerUser = async (userName: string, email: string, password: st
 
     try {
 
-        let hashPassword: any = ""
-
-        if (password === "") {
-            hashPassword = null
-        } else {
-            hashPassword = await bcrypt.hash(password, 8)
-        }
+        const hashPassword = await generateHash(password)
 
         const newUser = new User({
             userName,
