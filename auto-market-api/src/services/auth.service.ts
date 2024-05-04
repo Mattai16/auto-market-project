@@ -1,7 +1,8 @@
 import User from "../models/user";
 import { ResponseContent } from '../utils/response.content';
 import { StatusCodes } from 'http-status-codes';
-import { generateHash } from '../utils/password.hash';
+import { generateHash, matchPassword } from '../utils/password.bcrypt';
+import { createAccesToken } from "../utils/jwt";
 
 export const registerUser = async (userName: string, email: string, password: string, rol: string) => {
 
@@ -37,6 +38,44 @@ export const registerUser = async (userName: string, email: string, password: st
     }
 
     return ResponseContent
+}
+
+export const loginUser = async (email: string, password: string) => {
+    ResponseContent.error = true
+    let token = undefined
+    try {
+
+        const userFound = await User.findOne({ email })
+
+        if (userFound) {
+            const verifiPassword = await matchPassword(password, userFound.password)
+            if (verifiPassword) {
+
+                token = await createAccesToken({
+                    id: userFound._id,
+                    userName: userFound.userName,
+                    rol: userFound.rol
+                })
+            
+                ResponseContent.message = `Bienvenid@ al sistema ${userFound.userName}`
+                ResponseContent.satatus = StatusCodes.OK
+                ResponseContent.error = false
+
+            } else {
+                ResponseContent.message = 'Credenciales no validas'
+                ResponseContent.satatus = StatusCodes.NOT_FOUND
+            }
+        } else {
+            ResponseContent.message = 'Credenciales no validas'
+            ResponseContent.satatus = StatusCodes.NOT_FOUND
+        }
+
+    } catch (error: any) {
+        ResponseContent.message = `Error: ${error.message}`
+        ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+    }
+
+    return {resultLogin: ResponseContent, token}
 }
 
 

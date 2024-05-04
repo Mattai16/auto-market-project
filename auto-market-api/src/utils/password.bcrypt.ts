@@ -9,3 +9,8 @@ export const generateHash = async (password : string) => {
     }
     return hashPassword
 }
+
+export const matchPassword =  async (password: string, passwordUser: string) => {
+    const isMatch = await bcrypt.compare(password, passwordUser)
+    return isMatch
+}
