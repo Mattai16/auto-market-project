@@ -2,7 +2,7 @@ import "dotenv/config"
 import express  from "express";
 import cors from "cors";
 import { connectDB } from "./utils/db";
-import userRouter from '../src/routes/personal.routes'
+import userRouter from './routes/user.routes'
 import authRouter from '../src/routes/auth.routes'
 import carRouter from '../src/routes/car.routes'
 import { main } from "./utils/route.main";
