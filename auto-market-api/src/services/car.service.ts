@@ -40,5 +40,28 @@ export const registerCar = async (carData: Car) => {
   }
 
   return ResponseContent
-  
+
+}
+
+export const getAllCars = async () => {
+
+  ResponseContent.error = true
+  try {
+    const cars = await CarModel.find()
+    
+    if(cars.length > 0){
+      ResponseContent.message = cars
+      ResponseContent.satatus = StatusCodes.OK
+      ResponseContent.error = false
+    }else{
+      ResponseContent.message = "No se han encontrado carros"
+      ResponseContent.message = StatusCodes.NOT_FOUND
+    }
+
+  } catch (error: any) {
+    ResponseContent.message = `Error: ${error.message}`
+    ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+  }
+
+  return ResponseContent
 }

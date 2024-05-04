@@ -1,15 +1,21 @@
 import {Request, Response } from "express";
-import { registerCar } from "../services/car.service";
+import { getAllCars, registerCar } from "../services/car.service";
 import { StatusCodes } from "http-status-codes";
 
 
 export const getCars = async (_req: Request, res: Response) => {
 
-    res.status(200).json({
-        message: 'Obteniendo los carros'
-    })
-
-
+    try {
+        const resultCars = await getAllCars()
+        res.status(resultCars.satatus).json({
+            message: resultCars.message,
+            error: resultCars.error
+        })
+    } catch (error: any) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Error: ${error.message}`
+        })
+    }
 }
 
 export const postCar = async (req: Request, res: Response) => {
