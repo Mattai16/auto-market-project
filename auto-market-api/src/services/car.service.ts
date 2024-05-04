@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { Car } from "../interfaces/car.interface";
 import CarModel from "../models/car";
 import { ResponseContent } from "../utils/response.content";
+import { validateTypeId } from "../utils/validate.type.id";
 
 export const registerCar = async (carData: Car) => {
 
@@ -64,4 +65,35 @@ export const getAllCars = async () => {
   }
 
   return ResponseContent
+}
+
+export const getCommentsByIdCar = async (idCar: string) => {
+  
+  ResponseContent.error = true
+
+  try {
+    
+    if(validateTypeId(idCar)){
+      const car = await CarModel.findById(idCar).populate('comments')
+
+      if(car){
+        ResponseContent.message = car.comments
+        ResponseContent.satatus = StatusCodes.OK
+        ResponseContent.error = false
+      }else{
+        ResponseContent.message = `El carro no existe`
+        ResponseContent.satatus = StatusCodes.NOT_FOUND
+      }
+    }else{
+      ResponseContent.message = `El id no es valido`
+      ResponseContent.satatus = StatusCodes.BAD_REQUEST
+    }
+
+  } catch (error: any) {
+    ResponseContent.message = `Error: ${error.message}`
+    ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+  }
+
+  return ResponseContent
+
 }

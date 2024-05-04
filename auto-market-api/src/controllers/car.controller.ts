@@ -1,6 +1,7 @@
 import {Request, Response } from "express";
-import { getAllCars, registerCar } from "../services/car.service";
+import { getAllCars, getCommentsByIdCar, registerCar } from "../services/car.service";
 import { StatusCodes } from "http-status-codes";
+import { isValid } from "../utils/validate.elements";
 
 
 export const getCars = async (_req: Request, res: Response) => {
@@ -47,4 +48,23 @@ export const postCar = async (req: Request, res: Response) => {
             error: true
         })
     }
+}
+
+export const getCommentsByCar = async (req: Request, res: Response) => {
+  
+    const idCar = req.params.id
+
+    if(isValid(idCar)){
+        const resultComments = await getCommentsByIdCar(idCar)
+        res.status(resultComments.satatus).json({
+            message: resultComments.message,
+            error: resultComments.error
+        })
+    }else{
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: 'Dato no correcto',
+            error: true
+        })
+    }
+
 }
