@@ -15,7 +15,7 @@ export const registerComment = async (idUser: string, idCar: string, comment: st
             const userFound = await user.findById(idUser)
             const carFound = await car.findById(idCar)
 
-            if(userFound && carFound){
+            if (userFound && carFound) {
                 const newComment = new CommentModel({
                     user: idUser,
                     userName: userFound.userName,
@@ -24,30 +24,30 @@ export const registerComment = async (idUser: string, idCar: string, comment: st
 
                 const commentSaved = await newComment.save()
 
-                if(commentSaved){
-                    const commentId : string = commentSaved._id.toString()
+                if (commentSaved) {
+                    const commentId: string = commentSaved._id.toString()
                     carFound.comments.push(commentId)
                     const commentCar = await carFound.save()
 
-                    if(commentCar){
+                    if (commentCar) {
                         ResponseContent.message = 'Se guardo correctamente el comentario'
                         ResponseContent.status = StatusCodes.CREATED
                         ResponseContent.error = false
-                    }else{
+                    } else {
                         ResponseContent.message = 'No se guardo correctamente el comentario'
                         ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
                     }
 
-                }else{
+                } else {
                     ResponseContent.message = 'No se guardo correctamente el comentario'
                     ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
                 }
 
-            }else{
+            } else {
                 ResponseContent.message = 'No se econtraron los objetos'
                 ResponseContent.status = StatusCodes.NOT_FOUND
             }
-            
+
         } else {
             ResponseContent.message = 'Tipos de idObject validos'
             ResponseContent.status = StatusCodes.BAD_REQUEST

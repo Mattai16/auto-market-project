@@ -98,6 +98,42 @@ export const getCommentsByIdCar = async (idCar: string) => {
 
 }
 
+export const editCarById = async (idCar: string, carData: Car) => {
+
+  ResponseContent.error = true
+
+  if (validateTypeId(idCar)) {
+
+    const carFound = await CarModel.findById(idCar)
+
+    if (carFound) {
+
+      const resultUpdate = await CarModel.findByIdAndUpdate(idCar, carData, {
+        new: true
+      })
+
+      if (resultUpdate !== null) {
+        ResponseContent.message = resultUpdate
+        ResponseContent.status = StatusCodes.OK
+        ResponseContent.error = false
+      } else {
+        ResponseContent.message = 'El carro no se actualizó'
+        ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
+      }
+
+    } else {
+      ResponseContent.message = 'El carro no existe'
+      ResponseContent.status = StatusCodes.NOT_FOUND
+    }
+
+  } else {
+    ResponseContent.message = 'El id no es valido'
+    ResponseContent.status = StatusCodes.BAD_REQUEST
+  }
+
+  return ResponseContent
+}
+
 export const deleteCarById = async (idCar: string) => {
 
   ResponseContent.error = true

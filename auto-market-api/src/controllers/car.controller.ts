@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { deleteCarById, getAllCars, getCommentsByIdCar, registerCar } from "../services/car.service";
+import { deleteCarById, editCarById, getAllCars, getCommentsByIdCar, registerCar } from "../services/car.service";
 import { StatusCodes } from "http-status-codes";
 import { isValid } from "../utils/validate.elements";
 
@@ -45,6 +45,23 @@ export const postCar = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             message: 'Hubo un error al enviar el carro',
+            error: true
+        })
+    }
+}
+
+export const putCar = async (req: Request, res: Response) => {
+    const carData: any = req.body
+    const idCar = req.params.id
+    if (Object.keys(carData).length !== 0 && isValid(idCar)) {
+        const result = await editCarById(idCar, carData)
+        res.status(result.status).json({
+            message: result.message,
+            error: result.error
+        })
+    } else {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: 'No se enviaron los datos',
             error: true
         })
     }
