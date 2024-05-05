@@ -24,17 +24,17 @@ export const registerUser = async (userName: string, email: string, password: st
 
         if (userSaved.userName != undefined) {
             ResponseContent.message = `¡El usuario ${userSaved.userName} ha sido registrado!`
-            ResponseContent.satatus = StatusCodes.CREATED
+            ResponseContent.status = StatusCodes.CREATED
             ResponseContent.error = false
 
         } else {
             ResponseContent.message = `El usuario no se ha podido registrar`
-            ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+            ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
         }
 
     } catch (error: any) {
         ResponseContent.message = `Error: ${error.message}`
-        ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+        ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
     }
 
     return ResponseContent
@@ -58,21 +58,21 @@ export const loginUser = async (email: string, password: string) => {
                 })
             
                 ResponseContent.message = `Bienvenid@ al sistema ${userFound.userName}`
-                ResponseContent.satatus = StatusCodes.OK
+                ResponseContent.status = StatusCodes.OK
                 ResponseContent.error = false
 
             } else {
                 ResponseContent.message = 'Credenciales no validas'
-                ResponseContent.satatus = StatusCodes.NOT_FOUND
+                ResponseContent.status = StatusCodes.NOT_FOUND
             }
         } else {
             ResponseContent.message = 'Credenciales no validas'
-            ResponseContent.satatus = StatusCodes.NOT_FOUND
+            ResponseContent.status = StatusCodes.NOT_FOUND
         }
 
     } catch (error: any) {
         ResponseContent.message = `Error: ${error.message}`
-        ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+        ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
     }
 
     return {resultLogin: ResponseContent, token}

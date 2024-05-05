@@ -31,32 +31,32 @@ export const registerComment = async (idUser: string, idCar: string, comment: st
 
                     if(commentCar){
                         ResponseContent.message = 'Se guardo correctamente el comentario'
-                        ResponseContent.satatus = StatusCodes.CREATED
+                        ResponseContent.status = StatusCodes.CREATED
                         ResponseContent.error = false
                     }else{
                         ResponseContent.message = 'No se guardo correctamente el comentario'
-                        ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+                        ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
                     }
 
                 }else{
                     ResponseContent.message = 'No se guardo correctamente el comentario'
-                    ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+                    ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
                 }
 
             }else{
                 ResponseContent.message = 'No se econtraron los objetos'
-                ResponseContent.satatus = StatusCodes.NOT_FOUND
+                ResponseContent.status = StatusCodes.NOT_FOUND
             }
             
         } else {
             ResponseContent.message = 'Tipos de idObject validos'
-            ResponseContent.satatus = StatusCodes.BAD_REQUEST
+            ResponseContent.status = StatusCodes.BAD_REQUEST
         }
 
 
     } catch (error: any) {
         ResponseContent.message = `Error: ${error.message}`
-        ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+        ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
     }
 
     return ResponseContent

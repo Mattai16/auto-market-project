@@ -7,7 +7,7 @@ export const register = async (req: Request, res: Response) => {
     try {
 
         const newUser = await registerUser(userName, email, password, rol)
-        res.status(newUser.satatus).json({
+        res.status(newUser.status).json({
             message: newUser.message,
             error: newUser.error
         })
@@ -33,7 +33,7 @@ export const login = async (req: Request, res: Response) => {
         if (token) {
             res.cookie('token', token)
         }
-        res.status(resultLogin.satatus).json({
+        res.status(resultLogin.status).json({
             message: resultLogin.message,
             error: resultLogin.error
         })

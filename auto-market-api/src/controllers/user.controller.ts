@@ -27,7 +27,7 @@ export const postCommentByUser = async (req: Request, res: Response) => {
 
     if(isValid(idUser) && isValid(idCar) && isValid(comment)){
         const resultComment = await registerComment(idUser, idCar, comment)
-        res.status(resultComment.satatus).json({
+        res.status(resultComment.status).json({
             message: resultComment.message,
             error: resultComment.error
         })

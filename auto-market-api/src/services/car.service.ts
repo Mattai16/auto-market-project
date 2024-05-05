@@ -28,16 +28,16 @@ export const registerCar = async (carData: Car) => {
 
     if (carSaved.brand != undefined) {
       ResponseContent.message = `El carro ${carSaved.brand} ha sido registrado`
-      ResponseContent.satatus = StatusCodes.CREATED
+      ResponseContent.status = StatusCodes.CREATED
       ResponseContent.error = false
     } else {
       ResponseContent.message = `Error: ${carSaved}`
-      ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+      ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
     }
 
   } catch (error: any) {
     ResponseContent.message = `Error: ${error.message}`
-    ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+    ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
   }
 
   return ResponseContent
@@ -49,51 +49,91 @@ export const getAllCars = async () => {
   ResponseContent.error = true
   try {
     const cars = await CarModel.find()
-    
-    if(cars.length > 0){
+
+    if (cars.length > 0) {
       ResponseContent.message = cars
-      ResponseContent.satatus = StatusCodes.OK
+      ResponseContent.status = StatusCodes.OK
       ResponseContent.error = false
-    }else{
+    } else {
       ResponseContent.message = "No se han encontrado carros"
       ResponseContent.message = StatusCodes.NOT_FOUND
     }
 
   } catch (error: any) {
     ResponseContent.message = `Error: ${error.message}`
-    ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+    ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
   }
 
   return ResponseContent
 }
 
 export const getCommentsByIdCar = async (idCar: string) => {
-  
+
   ResponseContent.error = true
 
   try {
-    
-    if(validateTypeId(idCar)){
+
+    if (validateTypeId(idCar)) {
       const car = await CarModel.findById(idCar).populate('comments')
 
-      if(car){
+      if (car) {
         ResponseContent.message = car.comments
-        ResponseContent.satatus = StatusCodes.OK
+        ResponseContent.status = StatusCodes.OK
         ResponseContent.error = false
-      }else{
+      } else {
         ResponseContent.message = `El carro no existe`
-        ResponseContent.satatus = StatusCodes.NOT_FOUND
+        ResponseContent.status = StatusCodes.NOT_FOUND
       }
-    }else{
+    } else {
       ResponseContent.message = `El id no es valido`
-      ResponseContent.satatus = StatusCodes.BAD_REQUEST
+      ResponseContent.status = StatusCodes.BAD_REQUEST
     }
 
   } catch (error: any) {
     ResponseContent.message = `Error: ${error.message}`
-    ResponseContent.satatus = StatusCodes.INTERNAL_SERVER_ERROR
+    ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
   }
 
   return ResponseContent
 
+}
+
+export const deleteCarById = async (idCar: string) => {
+
+  ResponseContent.error = true
+
+  try {
+
+    if (validateTypeId(idCar)) {
+
+      const carFound = await CarModel.findById(idCar)
+
+      if (carFound) {
+
+        const resultDelete = await CarModel.deleteOne({ _id: idCar })
+
+        if (resultDelete.deletedCount > 0) {
+          ResponseContent.message = 'El carro se elimino correctamente'
+          ResponseContent.status = StatusCodes.OK
+        } else {
+          ResponseContent.message = 'Error al eliminar el carro'
+          ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
+        }
+
+      } else {
+        ResponseContent.message = 'El carro no existe'
+        ResponseContent.status = StatusCodes.NOT_FOUND
+      }
+
+    } else {
+      ResponseContent.message = 'El id no es valido'
+      ResponseContent.status = StatusCodes.BAD_REQUEST
+    }
+
+  } catch (error: any) {
+    ResponseContent.message = `Error: ${error.message}`
+    ResponseContent.status
+  }
+
+  return ResponseContent
 }

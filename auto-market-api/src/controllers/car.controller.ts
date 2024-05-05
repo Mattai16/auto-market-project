@@ -1,5 +1,5 @@
-import {Request, Response } from "express";
-import { getAllCars, getCommentsByIdCar, registerCar } from "../services/car.service";
+import { Request, Response } from "express";
+import { deleteCarById, getAllCars, getCommentsByIdCar, registerCar } from "../services/car.service";
 import { StatusCodes } from "http-status-codes";
 import { isValid } from "../utils/validate.elements";
 
@@ -8,7 +8,7 @@ export const getCars = async (_req: Request, res: Response) => {
 
     try {
         const resultCars = await getAllCars()
-        res.status(resultCars.satatus).json({
+        res.status(resultCars.status).json({
             message: resultCars.message,
             error: resultCars.error
         })
@@ -25,17 +25,17 @@ export const postCar = async (req: Request, res: Response) => {
     try {
 
         const carData = req.body
-       
-        
-        if(Object.entries(carData).length !== 0){
+
+
+        if (Object.entries(carData).length !== 0) {
 
             const resultCar = await registerCar(carData)
-            res.status(resultCar.satatus).json({
+            res.status(resultCar.status).json({
                 message: resultCar.message,
                 error: resultCar.error
             })
 
-        }else{
+        } else {
             res.status(StatusCodes.BAD_REQUEST).json({
                 message: 'No se enviaron datos del carro',
                 error: true
@@ -51,16 +51,35 @@ export const postCar = async (req: Request, res: Response) => {
 }
 
 export const getCommentsByCar = async (req: Request, res: Response) => {
-  
+
     const idCar = req.params.id
 
-    if(isValid(idCar)){
+    if (isValid(idCar)) {
         const resultComments = await getCommentsByIdCar(idCar)
-        res.status(resultComments.satatus).json({
+        res.status(resultComments.status).json({
             message: resultComments.message,
             error: resultComments.error
         })
-    }else{
+    } else {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: 'Dato no correcto',
+            error: true
+        })
+    }
+
+}
+
+export const deleteCar = async (req: Request, res: Response) => {
+
+    const idCar = req.params.id
+
+    if (isValid(idCar)) {
+        const result = await deleteCarById(idCar)
+        res.status(result.status).json({
+            message: result.message,
+            error: result.error
+        })
+    } else {
         res.status(StatusCodes.BAD_REQUEST).json({
             message: 'Dato no correcto',
             error: true

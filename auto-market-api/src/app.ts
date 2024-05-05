@@ -8,7 +8,7 @@ import carRouter from '../src/routes/car.routes'
 import { main } from "./utils/route.main";
 import cookieParser from 'cookie-parser'
 
-const PORT = process.env.PORT || 3003;
+const PORT = 3003;
 const app = express()
 
 app.use(express.json())
