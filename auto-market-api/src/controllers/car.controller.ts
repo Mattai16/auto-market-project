@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { deleteCarById, editCarById, getAllCars, getCommentsByIdCar, registerCar } from "../services/car.service";
 import { StatusCodes } from "http-status-codes";
 import { isValid } from "../utils/validate.elements";
-
+import sharp from 'sharp'
 
 export const getCars = async (_req: Request, res: Response) => {
 
@@ -21,23 +21,37 @@ export const getCars = async (_req: Request, res: Response) => {
 
 export const postCar = async (req: Request, res: Response) => {
 
-
     try {
 
         const carData = req.body
+        const imagen = req.file
+
+        const imagenRedimensionada = await sharp(imagen?.buffer)
+        .resize({ width: 400 })
+        .jpeg({ quality: 20 })
+        .toBuffer();
 
 
-        if (Object.entries(carData).length !== 0) {
+        const imagenBase64 = imagenRedimensionada.toString('base64');
 
-            const resultCar = await registerCar(carData)
-            res.status(resultCar.status).json({
-                message: resultCar.message,
-                error: resultCar.error
-            })
+        if (imagenBase64) {
+            if (Object.entries(carData).length !== 0) {
 
+                const resultCar = await registerCar(carData, imagenBase64)
+                res.status(resultCar.status).json({
+                    message: resultCar.message,
+                    error: resultCar.error
+                })
+
+            } else {
+                res.status(StatusCodes.BAD_REQUEST).json({
+                    message: 'No se enviaron datos del carro',
+                    error: true
+                })
+            }
         } else {
-            res.status(StatusCodes.BAD_REQUEST).json({
-                message: 'No se enviaron datos del carro',
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: 'No se pudo cargar la imagen',
                 error: true
             })
         }

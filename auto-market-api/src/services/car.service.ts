@@ -4,7 +4,7 @@ import CarModel from "../models/car";
 import { ResponseContent } from "../utils/response.content";
 import { validateTypeId } from "../utils/validate.type.id";
 
-export const registerCar = async (carData: Car) => {
+export const registerCar = async (carData: Car, imagenCar: string) => {
 
   ResponseContent.error = true
 
@@ -20,7 +20,8 @@ export const registerCar = async (carData: Car) => {
       transmission: carData.transmission,
       engineCapacity: carData.engineCapacity,
       condition: carData.condition,
-      description: carData.description
+      description: carData.description,
+      image: imagenCar
     })
 
     const carSaved = await newCar.save()

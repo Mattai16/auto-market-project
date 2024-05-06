@@ -1,12 +1,15 @@
 import { Router } from "express";
 import { deleteCar, getCars, getCommentsByCar, postCar, putCar } from "../controllers/car.controller";
+import multer from 'multer'
 
 const router = Router()
+const upload = multer({ storage: multer.memoryStorage() })
 
 router.get('/', getCars)
-router.post('/registrar', postCar)
+router.post('/registrar', upload.single('imagen'), postCar)
 router.get('/getCommentsByCar/:id', getCommentsByCar)
 router.delete('/deleteCar/:id', deleteCar)
+router.put('/updateCar/:id', putCar)
 router.put('/updateCar/:id', putCar)
 
 export default router

@@ -10,7 +10,7 @@ export interface Car {
     engineCapacity: number,
     condition: 'Excelente' | 'Buena' | 'Mala',
     description?: string,
-    image: Buffer,
+    image: string,
     imageType: string
     comments: string[],
 }

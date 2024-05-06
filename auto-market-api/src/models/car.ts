@@ -54,7 +54,8 @@ const carSchema = new Schema<Car>({
         trim: true
     },
     image: {
-        type: Buffer
+        type: String,
+        required: true
     },
     imageType: {
         type: String
