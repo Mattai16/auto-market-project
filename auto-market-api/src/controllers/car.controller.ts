@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { deleteCarById, editCarById, getAllCars, getCommentsByIdCar, registerCar } from "../services/car.service";
+import { deleteCarById, editCarById, getAllCars, getCarById, getCommentsByIdCar, registerCar } from "../services/car.service";
 import { StatusCodes } from "http-status-codes";
 import { isValid } from "../utils/validate.elements";
 import sharp from 'sharp'
@@ -17,6 +17,23 @@ export const getCars = async (_req: Request, res: Response) => {
             message: `Error: ${error.message}`
         })
     }
+}
+
+export const getCar = async (req: Request, res: Response) => {
+  const idCar = req.params.id
+
+  if(isValid(idCar)){
+    const result = await getCarById(idCar)
+    res.status(result.status).json({
+        message: result.message,
+        error: result.error
+    })
+  }else{
+    res.status(StatusCodes.BAD_REQUEST).json({
+        message: 'Dato no correcto',
+        error: true
+    })
+  }
 }
 
 export const postCar = async (req: Request, res: Response) => {

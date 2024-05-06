@@ -45,6 +45,37 @@ export const registerCar = async (carData: Car, imagenCar: string) => {
 
 }
 
+export const getCarById = async (idCar: string) => {
+  ResponseContent.error = true
+
+  try {
+
+    if (validateTypeId(idCar)) {
+    
+      const carFound = await CarModel.findById(idCar)
+
+      if(carFound){
+        ResponseContent.message = carFound
+        ResponseContent.status = StatusCodes.OK
+        ResponseContent.error = false
+      } else {
+        ResponseContent.message = 'El carro no existe'
+        ResponseContent.status = StatusCodes.NOT_FOUND
+      }
+      
+    } else {
+      ResponseContent.message = 'El id no es valido'
+      ResponseContent.status = StatusCodes.BAD_REQUEST
+    }
+    
+  } catch (error: any) {
+    ResponseContent.message = `Error: ${error.message}`
+    ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR    
+  }
+
+  return ResponseContent
+}
+
 export const getAllCars = async () => {
 
   ResponseContent.error = true
