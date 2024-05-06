@@ -4,6 +4,7 @@ import CommentModel from "../models/comment";
 import { ResponseContent } from "../utils/response.content"
 import { StatusCodes } from "http-status-codes";
 import { validateTypeId } from "../utils/validate.type.id";
+import { isValidObjectId } from "mongoose";
 
 export const registerComment = async (idUser: string, idCar: string, comment: string) => {
     ResponseContent.error = true
@@ -94,6 +95,39 @@ export const editCommentById = async (idComment: string, content: string) => {
     } catch (error: any) {
         ResponseContent.message = `Error: ${error.message}`
         ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
+    }
+
+    return ResponseContent
+}
+
+export const deleteCommentById = async (idComment: string) => {
+
+    ResponseContent.error = true
+
+    if (isValidObjectId(idComment)) {
+
+        const commentFound = await CommentModel.findById(idComment)
+
+        if (commentFound) {
+
+            const commentDeleted = await CommentModel.deleteOne({ _id: idComment })
+            if (commentDeleted.deletedCount > 0) {
+                ResponseContent.message = 'El comentario ha sido eliminado'
+                ResponseContent.status = StatusCodes.OK
+                ResponseContent.error = false
+            } else {
+                ResponseContent.message = 'El comentario no se pudo eliminar'
+                ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
+            }
+
+        } else {
+            ResponseContent.message = 'El comentario no existe'
+            ResponseContent.status = StatusCodes.NOT_FOUND
+        }
+
+    } else {
+        ResponseContent.message = 'El id no es valido'
+        ResponseContent.status = StatusCodes.BAD_REQUEST
     }
 
     return ResponseContent

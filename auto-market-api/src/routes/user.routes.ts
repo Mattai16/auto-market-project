@@ -1,5 +1,5 @@
 import express from 'express'
-import { getUser, postCommentByUser, postUser, putComment } from '../controllers/user.controller'
+import { deleteComment, getUser, postCommentByUser, postUser, putComment } from '../controllers/user.controller'
 import { auth } from '../middlewares/validate.token'
 
 
@@ -9,5 +9,6 @@ router.get('/', getUser)
 router.post('/registrar', postUser)
 router.post('/comentar', auth, postCommentByUser)
 router.put('/editComment/:id', auth, putComment)
+router.delete('/deleteComment/:id', auth, deleteComment)
 
 export default router

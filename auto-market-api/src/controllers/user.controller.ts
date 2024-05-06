@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { isValid } from "../utils/validate.elements";
-import { editCommentById, registerComment } from "../services/user.service";
+import { deleteCommentById, editCommentById, registerComment } from "../services/user.service";
 
 export const getUser = (_req: Request, res: Response) => {
     console.log('Han solicitado los usuarios')
@@ -23,15 +23,15 @@ export const postUser = (_req: Request, res: Response) => {
 }
 
 export const postCommentByUser = async (req: Request, res: Response) => {
-    const {idUser, idCar, comment} = req.body
+    const { idUser, idCar, comment } = req.body
 
-    if(isValid(idUser) && isValid(idCar) && isValid(comment)){
+    if (isValid(idUser) && isValid(idCar) && isValid(comment)) {
         const resultComment = await registerComment(idUser, idCar, comment)
         res.status(resultComment.status).json({
             message: resultComment.message,
             error: resultComment.error
         })
-    }else{
+    } else {
         res.status(StatusCodes.BAD_REQUEST).json({
             message: 'Datos no correctos',
             error: true
@@ -40,22 +40,43 @@ export const postCommentByUser = async (req: Request, res: Response) => {
 }
 
 export const putComment = async (req: Request, res: Response) => {
-  
-    const idComment = req.params.id
-    const {content}  = req.body
 
-    if(content && isValid(idComment)){
+    const idComment = req.params.id
+    const { content } = req.body
+
+    if (content && isValid(idComment)) {
         const result = await editCommentById(idComment, content)
         res.status(result.status).json({
             message: result.message,
             error: result.error
         })
-    }else{
+    } else {
         res.status(StatusCodes.BAD_REQUEST).json({
             message: 'No se enviaron los datos',
             error: true
         })
     }
+
+}
+
+export const deleteComment = async (req: Request, res: Response) => {
+
+    const idComment = req.params.id
+
+
+    if (isValid(idComment)) {
+        const result = await deleteCommentById(idComment)
+        res.status(result.status).json({
+            message: result.message,
+            error: result.error
+        })
+    } else {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: 'No se envio el dato',
+            error: true
+        })
+    }
+
 
 }
 
