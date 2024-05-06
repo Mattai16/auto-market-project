@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { isValid } from "../utils/validate.elements";
-import { registerComment } from "../services/user.service";
+import { editCommentById, registerComment } from "../services/user.service";
 
 export const getUser = (_req: Request, res: Response) => {
     console.log('Han solicitado los usuarios')
@@ -37,5 +37,25 @@ export const postCommentByUser = async (req: Request, res: Response) => {
             error: true
         })
     }
+}
+
+export const putComment = async (req: Request, res: Response) => {
+  
+    const idComment = req.params.id
+    const {content}  = req.body
+
+    if(content && isValid(idComment)){
+        const result = await editCommentById(idComment, content)
+        res.status(result.status).json({
+            message: result.message,
+            error: result.error
+        })
+    }else{
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: 'No se enviaron los datos',
+            error: true
+        })
+    }
+
 }
 

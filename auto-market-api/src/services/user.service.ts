@@ -61,3 +61,40 @@ export const registerComment = async (idUser: string, idCar: string, comment: st
 
     return ResponseContent
 }
+
+export const editCommentById = async (idComment: string, content: string) => {
+
+    ResponseContent.error = true
+
+    try {
+
+        if (validateTypeId(idComment)) {
+
+            const commentFound = await CommentModel.findById(idComment)
+            if (commentFound) {
+                const commentUpdate = await CommentModel.findByIdAndUpdate(idComment, { content }, { new: true })
+                if (commentUpdate) {
+                    ResponseContent.message = commentUpdate
+                    ResponseContent.status = StatusCodes.OK
+                    ResponseContent.error = false
+                } else {
+                    ResponseContent.message = 'El comentario no se pudo editar'
+                    ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
+                }
+            } else {
+                ResponseContent.message = 'El comentario no existe'
+                ResponseContent.status = StatusCodes.NOT_FOUND
+            }
+
+        } else {
+            ResponseContent.message = 'El id no es valido'
+            ResponseContent.status = StatusCodes.BAD_REQUEST
+        }
+
+    } catch (error: any) {
+        ResponseContent.message = `Error: ${error.message}`
+        ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
+    }
+
+    return ResponseContent
+}
