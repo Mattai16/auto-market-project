@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default function CarCArd({ car }) {
+export default function CarCard({ car }) {
     const imageUrl = "https://via.placeholder.com/200";
     const name = "Producto Genérico";
     
