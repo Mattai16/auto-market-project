@@ -1,9 +1,17 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
-import { Link } from 'react-router-dom';
+import { getCars } from '../api/fetch'
+
+async function loadCars(){
+    const {data} = await getCars()
+    console.log(data)
+    return data
+}
 
 function HomePage() {
 
+    loadCars()
+    
     return (
         <div>
             <NavBar />
