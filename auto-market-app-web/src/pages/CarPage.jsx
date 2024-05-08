@@ -31,8 +31,6 @@ function CarPage() {
             setCar(car)
         }
         fetchData(id)
-
-
     }, [id])
 
     useEffect(() => {
@@ -50,7 +48,7 @@ function CarPage() {
             <main className="container mx-auto px-20 mt-20 flex">
                 <div className="flex-1 mr-5 flex justify-end">
                     <div className="h-full fixed">
-                        <CarView />
+                        {car && <CarView car={car} />}
                     </div>
                 </div>
                 <div className="flex-1 flex justify-start">
@@ -61,7 +59,7 @@ function CarPage() {
                                 comments.map(comment => (
                                     <CommentCard comment={comment} key={comment._id} />
                                 ))
-                            ) : (<p className=' text-center mt-5 text-gray-700 text-3xl text-base font-semibold'>No hay comentarios</p>)}
+                            ) : (<p className=' text-center mt-5 text-gray-700 text-3xl font-semibold'>No hay comentarios</p>)}
                         </div>
                         <p className='mt-10'></p>
 
