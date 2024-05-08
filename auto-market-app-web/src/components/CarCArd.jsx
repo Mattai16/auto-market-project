@@ -12,7 +12,7 @@ export default function CarCard({ car }) {
                 <h2 className="text-gray-800 text-xl font-semibold">{car.brand}</h2>
                 <p className="text-gray-800 font-bold mt-2">${car.price}</p>
                 <div className='text-right mt-4'>
-                    <Link>
+                    <Link to={`/carro/${car._id}`}>
                         <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                             Ver más
                         </button>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NavBar from '../components/NavBar'
 import { getCars } from '../api/fetch'
-import CarCard from '../components/CarCard'
+import CarCard from '../components/CarCArd'
 
 
 async function loadCars() {
