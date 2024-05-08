@@ -16,10 +16,7 @@ function NavBar() {
                                 <Link to="/" className="text-white hover:bg-gray-500 px-3 py-2 rounded-md text-sm font-medium">INICIO</Link>
                             </li>
                             <li>
-                                <Link to="/carros" className="text-white hover:bg-gray-500 px-3 py-2 rounded-md text-sm font-medium">CARROS</Link>
-                            </li>
-                            <li>
-                                <Link to="/carros" className="text-white hover:bg-gray-500 px-3 py-2 rounded-md text-sm font-medium">LOGIN</Link>
+                                <Link to="/login" className="text-white hover:bg-gray-500 px-3 py-2 rounded-md text-sm font-medium">LOGIN</Link>
                             </li>
                         </ul>
                     </div>
