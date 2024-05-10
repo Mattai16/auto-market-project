@@ -2,12 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function CarCard({ car }) {
-    const imageUrl = "https://via.placeholder.com/200";
-    const name = "Producto Genérico";
-    
+    const imageUrl = `data:image/jpeg;base64,${car.image}`;
+
     return (
         <div className="max-w-md bg-white shadow-md rounded-lg overflow-hidden">
-            <img className="w-full h-40 object-cover" src={imageUrl} alt={name} />
+            <img className="w-full h-40 object-cover" src={imageUrl} alt={car.model} />
             <div className="p-4">
                 <h2 className="text-gray-800 text-xl font-semibold">{car.brand}</h2>
                 <p className="text-gray-800 font-bold mt-2">${car.price}</p>

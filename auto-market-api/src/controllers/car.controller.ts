@@ -44,8 +44,8 @@ export const postCar = async (req: Request, res: Response) => {
         const imagen = req.file
 
         const imagenRedimensionada = await sharp(imagen?.buffer)
-        .resize({ width: 400 })
-        .jpeg({ quality: 20 })
+        .resize({ width: 200 })
+        .jpeg({ quality: 80 })
         .toBuffer();
 
 
@@ -73,9 +73,10 @@ export const postCar = async (req: Request, res: Response) => {
             })
         }
 
-    } catch (error) {
+    } catch (error:any) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             message: 'Hubo un error al enviar el carro',
+            content: `Error:${error.message}`,
             error: true
         })
     }

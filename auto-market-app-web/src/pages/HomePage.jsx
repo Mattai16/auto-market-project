@@ -32,6 +32,7 @@ function HomePage() {
                     <CarCard car={car} key={car._id} />
                 ))}
             </main>
+                <p className='w-full mt-10'></p>
         </div>
     )
 }
