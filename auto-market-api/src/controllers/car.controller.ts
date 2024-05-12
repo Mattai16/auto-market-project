@@ -45,7 +45,7 @@ export const postCar = async (req: Request, res: Response) => {
 
         const imagenRedimensionada = await sharp(imagen?.buffer)
         .resize({ width: 200 })
-        .jpeg({ quality: 80 })
+        .jpeg({ quality: 90 })
         .toBuffer();
 
 
