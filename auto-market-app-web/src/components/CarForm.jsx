@@ -1,15 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import defaultImage from '../assets/preview.png';
 import { useForm } from 'react-hook-form';
 import { postDataCar } from '../api/fetch';
+import { useNavigate } from 'react-router-dom';
 
 function CarForm() {
 
+    const navigate = useNavigate()
     const { setValue, register, handleSubmit, formState: { errors } } = useForm()
     const [selectedImage, setSelectedImage] = useState(null);
     const [imgSelected, setImageSelected] = useState(false);
-
-    const [authErrors, setAuthErrors] = useState(null)
+    const [condicionSelected, setCondicionSelected] = useState('Excelente')
+    const [fuelTypeSelected, setfuelTypeSelected] = useState('Gasolina')
+    const [postErrors, setPostErrors] = useState(null)
+    const [transmissionSelected, setTransmissionSelected] = useState('Estandar')
 
     const handleImgChange = (event) => {
         const selectedFile = event.target.files[0];
@@ -25,6 +29,26 @@ function CarForm() {
         }
     };
 
+    useEffect(() => {
+        if (postErrors != null) {
+            const timer = setTimeout(() => {
+                setPostErrors(null)
+            }, 4000)
+            return () => clearTimeout(timer)
+        }
+    }, [postErrors])
+
+    const fuelTypeChange = (event) => {
+        setfuelTypeSelected(event.target.value)
+    }
+
+    const conditionChange = (event) => {
+        setCondicionSelected(event.target.value)
+    }
+
+    const transmissionChange = (event) => {
+        setTransmissionSelected(event.target.value)
+    }
 
     const onSubmit = handleSubmit(async (values) => {
         const formData = new FormData()
@@ -33,20 +57,22 @@ function CarForm() {
         formData.append('year', values.year)
         formData.append('mileage', values.mileage)
         formData.append('price', values.price)
-        formData.append('fuelType', values.fuelType)
-        formData.append('transmission', values.transmission)
-        formData.append('condition', values.condition)
+        formData.append('fuelType', fuelTypeSelected)
+        formData.append('transmission', transmissionSelected)
+        formData.append('condition', condicionSelected)
         formData.append('imagen', values.imagen)
         formData.append('description', values.description)
-
+        formData.append('engineCapacity', values.engineCapacity)
+        
         postDataCar(formData)
             .then(response => {
                 console.log(response)
+                navigate('/')
             })
             .catch(error => {
                 console.log(error)
+                setPostErrors(error.response.data.message)
             })
-
     })
 
     return (
@@ -120,87 +146,119 @@ function CarForm() {
                                     </div>
                                     <div>
                                         <label className="block text-gray-700 font-bold">Año</label>
-                                        <input type="text"
-                                            {...register('year', { required: true })}
+                                        <input
+                                            type="text"
+                                            {...register('year', {
+                                                required: true,
+                                                pattern: {
+                                                    value: /^(19\d{2}|20[0-1]\d|202[0-4])$/,
+                                                    message: "Ingrese un año válido (entre 1900 y 2024)"
+                                                }
+                                            })}
                                             className="border-solid border-2 w-full rounded-md px-4 py-2"
-                                            placeholder='Año' />
-                                        {
-                                            errors.year && (
-                                                <p className='text-red-500 px-1'>Año requerido</p>
-                                            )
-                                        }
+                                            placeholder='Año'
+                                        />
+                                        {errors.year && (
+                                            <p className='text-red-500 px-1'>{errors.year.message}</p>
+                                        )}
                                     </div>
+
+
                                     <div>
                                         <label className="block text-gray-700 font-bold">Kilometraje</label>
-                                        <input type="text"
-                                            {...register('mileage', { required: true })}
+                                        <input
+                                            type="text"
+                                            {...register('mileage', {
+                                                required: true,
+                                                pattern: {
+                                                    value: /^(0|[1-9]\d{0,5})$/,
+                                                    message: "El kilometraje debe ser un número entre 0 y 300,000"
+                                                },
+                                                validate: value => parseInt(value, 10) <= 300000 || "El kilometraje debe ser un número entre 0 y 300,000"
+                                            })}
                                             className="border-solid border-2 w-full rounded-md px-4 py-2"
                                             placeholder='Kilometraje' />
                                         {
                                             errors.mileage && (
-                                                <p className='text-red-500 px-1'>Km requerido</p>
+                                                <p className='text-red-500 px-1'>{errors.mileage.message}</p>
                                             )
                                         }
                                     </div>
+
                                     <div>
                                         <label className="block text-gray-700 font-bold">Precio</label>
-                                        <input type="text"
-                                            {...register('price', { required: true })}
+                                        <input
+                                            type="number"
+                                            {...register('price', {
+                                                required: true,
+                                                pattern: {
+                                                    value: /^[1-9]\d*$/,
+                                                    message: "Formato no correcto"
+                                                },
+
+                                            })}
                                             className="border-solid border-2 w-full rounded-md px-4 py-2"
-                                            placeholder='Precio' />
-                                        {
-                                            errors.price && (
-                                                <p className='text-red-500 px-1'>Precio requerido</p>
-                                            )
-                                        }
+                                            placeholder='Precio'
+                                        />
+                                        {errors.price && (
+                                            <p className='text-red-500 px-1'>{errors.price.message}</p>
+                                        )}
                                     </div>
+
                                     <div>
                                         <label className="block text-gray-700 font-bold">Combustible</label>
-                                        <input type="text"
-                                            {...register('fuelType', { required: true })}
+                                        <select type="text"
+                                            value={fuelTypeSelected}
+                                            onChange={fuelTypeChange}
                                             className="border-solid border-2 w-full rounded-md px-4 py-2"
-                                            placeholder='Tipo' />
-                                        {
-                                            errors.fuelType && (
-                                                <p className='text-red-500 px-1'>Tipo requerido</p>
-                                            )
-                                        }
+                                        >
+                                            <option value="Gasolina">Gasolina</option>
+                                            <option value="Electrico">Electrico</option>
+                                            <option value="Diesel">Diesel</option>
+                                            <option value="Hibirido">Hibirido</option>
+                                        </select>
                                     </div>
+
                                     <div>
                                         <label className="block text-gray-700 font-bold">Transmisión</label>
-                                        <input type="text"
-                                            {...register('transmission', { required: true })}
+                                        <select type="text"
+                                            value={transmissionSelected}
+                                            onChange={transmissionChange}
                                             className="border-solid border-2 w-full rounded-md px-4 py-2"
-                                            placeholder='Transmisión' />
-                                        {
-                                            errors.transmission && (
-                                                <p className='text-red-500 px-1'>Transmisión requerida</p>
-                                            )
-                                        }
+                                            placeholder='Transmisión'>
+                                            <option value="Estandar">Estandar</option>
+                                            <option value="Automatico">Automatico</option>
+                                        </select>
                                     </div>
                                     <div>
                                         <label className="block text-gray-700 font-bold">Capacidad de motor</label>
-                                        <input type="text"
-                                            {...register('engineCapacity', { required: true })}
+                                        <input
+                                            type="text"
+                                            {...register('engineCapacity', {
+                                                required: true,
+                                                pattern: {
+                                                    value: /^(0|[1-9]\d{0,2})(\.\d{1,2})?$/,
+                                                    message: "La capacidad del motor debe ser un número válido"
+                                                }
+                                            })}
                                             className="border-solid border-2 w-full rounded-md px-4 py-2"
-                                            placeholder='Capacidad de motor' />
-                                        {
-                                            errors.engineCapacity && (
-                                                <p className='text-red-500 px-1'>Capacidad requerida</p>
-                                            )
-                                        }
+                                            placeholder='Capacidad de motor'
+                                        />
+                                        {errors.engineCapacity && (
+                                            <p className='text-red-500 px-1'>{errors.engineCapacity.message}</p>
+                                        )}
                                     </div>
+
                                     <div>
                                         <label className="block text-gray-700 font-bold">Condición </label>
-                                        <input type="text"
-                                            {...register('condition', { required: true })}
+                                        <select
+                                            value={condicionSelected} onChange={conditionChange}
                                             className="border-solid border-2 w-full rounded-md px-4 py-2"
-                                            placeholder='Condición' />
-                                        {
-                                            errors.condition && (
-                                                <p className='text-red-500 px-1'>Condición requerida</p>
-                                            )
-                                        }
+                                        >
+                                            <option value="Excelente">Excelente</option>
+                                            <option value="Buena">Buena</option>
+                                            <option value="Mala">Mala</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -225,6 +283,11 @@ function CarForm() {
                                 Registrar carro
                             </button>
 
+                            {
+                                <div className='text-red-500 px-1 pt-3'>
+                                    {postErrors}
+                                </div>
+                            }
                         </div>
 
 
