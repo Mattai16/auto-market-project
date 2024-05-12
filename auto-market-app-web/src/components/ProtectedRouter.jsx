@@ -4,9 +4,10 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 function ProtectedRouter() {
 
-    const {isAuth} = useAuth()
+    const {isAuth, loading} = useAuth()
 
-    if(!isAuth) return <Navigate to='/' replace/>
+    if (loading) return <h1>Loading...</h1>
+    if(!loading && !isAuth) return <Navigate to='/' replace/>
 
     return <Outlet/>
 }

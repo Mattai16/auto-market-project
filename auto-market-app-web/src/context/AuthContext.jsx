@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { loginRequest } from "../api/fetch";
+import { loginRequest, validateToken } from "../api/fetch";
 import Cookies from 'js-cookie'
 export const AuthContext = createContext()
 
@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [isAuth, setIsAuth] = useState(false)
   const [errors, setErros] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   const login = async (user) => {
     try {
@@ -43,19 +44,43 @@ export const AuthProvider = ({ children }) => {
 
       if (!cookies.token) {
         setIsAuth(false)
+        setLoading(false)
         return setUser(null)
       }
+
+      try {
+
+        if (cookies.token) {
+          const res = await validateToken()
+          if (!res.data) {
+            setIsAuth(false)
+            setLoading(false)
+            return
+          }
+
+          setIsAuth(true)
+          setUser(res.data)
+          setLoading(false)
+
+        }
+
+      } catch (error) {
+        setIsAuth(false)
+        setUser(null)
+        setLoading(false)
+      }
     }
-    console.log(isAuth)
+
     checkAuth()
-  }, [isAuth])
+  }, [isAuth, user])
 
   return (
     <AuthContext.Provider value={{
       user,
       isAuth,
       errors,
-      login
+      login,
+      loading
     }}>
       {children}
     </AuthContext.Provider>
