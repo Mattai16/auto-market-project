@@ -51,7 +51,7 @@ const CarPublication = ({ car }) => {
             </div>
             <div className="max-w-[500px] w-full overflow-y-auto overflow-x-hidden px-10 pb">
                 <label className="block text-gray-700 font-bold">Descripción</label>
-                <p className="block max-w-[500px]">{car.description}</p>
+                <p className="block max-w-[500px] pb-5">{car.description}</p>
             </div>
         </div>
     );
