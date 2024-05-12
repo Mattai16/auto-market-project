@@ -1,11 +1,11 @@
 import React from 'react'
-import NavBar from '../components/NavBar'
 import CarForm from '../components/CarForm'
+import NavBarUser from '../components/NavBarUser'
 
 function RegisterCarPage() {
   return (
     <div>
-        <NavBar/>
+        <NavBarUser/>
         <CarForm/>
     </div>
   )

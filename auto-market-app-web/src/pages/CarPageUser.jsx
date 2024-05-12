@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import NavBar from '../components/NavBar'
 import CarView from '../components/CarView'
+import CommentBox from '../components/CommentBox';
 import CommentCard from '../components/CommentCard';
 import { useParams } from 'react-router-dom';
 import { getCar, getCommentsByCar } from '../api/fetch';
-import { Link } from 'react-router-dom';
+import NavBarUser from '../components/NavBarUser';
 
 async function loadCar(id) {
     const data = await getCar(id)
@@ -18,7 +18,7 @@ async function loadComments(id) {
     return commentsData
 }
 
-function CarPage() {
+function CarPageUser() {
 
     const { id } = useParams()
 
@@ -44,7 +44,7 @@ function CarPage() {
 
     return (
         <div>
-            <NavBar />
+            <NavBarUser />
             <main className="container mx-auto px-20 mt-20 flex">
                 <div className="flex-1 mr-5 flex justify-end">
                     <div className="h-full fixed">
@@ -54,13 +54,7 @@ function CarPage() {
                 <div className="flex-1 flex justify-start">
                     <div className="h-full w-[450px]">
                         <div className='w-full'>
-                                <Link to='/login'>
-                            <div className="flex mt-10">
-                                    <label
-                                        className="text-white bg-cyan-950 text-center flex-1 h-10 p-2 rounded-md resize-none mr-2 hover:bg-gray-800 cursor-pointer"
-                                    >Inicia sesión para hacer cometarios</label>
-                            </div>
-                                </Link>
+                            <CommentBox />
                             {comments && comments.length > 0 ? (
                                 comments.map(comment => (
                                     <CommentCard comment={comment} key={comment._id} />
@@ -76,4 +70,4 @@ function CarPage() {
     );
 }
 
-export default CarPage
+export default CarPageUser

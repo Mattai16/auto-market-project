@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import NavBar from '../components/NavBar'
 import { getCars } from '../api/fetch'
-import CarCard from '../components/CarCArd'
+import NavBarUser from '../components/NavBarUser'
+import CarCardUser from '../components/CarCardUser'
 
 
 async function loadCars() {
@@ -26,10 +26,10 @@ function HomePageUser() {
 
     return (
         <div>
-            <NavBar />
+            <NavBarUser />
             <main className='container mx-auto px-20 mt-20 grid grid-cols-4 gap-5'>
                 {cars.map((car) => (
-                    <CarCard car={car} key={car._id} />
+                    <CarCardUser car={car} key={car._id} />
                 ))}
             </main>
                 <p className='w-full mt-10'></p>
