@@ -1,34 +1,64 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import NavBar from '../components/NavBar'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { useAuth } from '../context/AuthContext'
 
 function LoginPage() {
+
+    const { register, handleSubmit, formState: { errors } } = useForm()
+    const { isAuth, login, errors: AuthErrors } = useAuth()
+    const navigate = useNavigate()
+
+    useEffect(() =>{
+        if (isAuth) navigate('/home')
+    })
+
+    const onSubmit = handleSubmit(async (values) => {
+        await login(values)
+    })
+
+
     return (
         <div>
             <NavBar />
             <div className='flex items-center justify-center drop-shadow-lg mt-20 h-[calc(100vh-350px)]'>
                 <div className='bg-white max-w-md w-full p-8 rounded-md'>
                     <h1 className='font-bold text-3xl mb-6 '>Inicio de sesión</h1>
-
-                    <form action="">
+                    {
+                        <div className='text-red-500 px-1 text-center'>
+                            {AuthErrors}
+                        </div>
+                    }
+                    <form onSubmit={onSubmit}>
                         <div className="mb-4">
                             <label htmlFor="email" className="block text-sm font-semibold mb-2">Email</label>
                             <input
-                                id="email"
+                                {...register('email', { required: true })}
                                 className='border-solid border-2 w-full rounded-md px-4 py-2'
-                                type="text"
+                                type="email"
                                 placeholder='Ingresa tu email'
                             />
+                            {
+                                errors.email && (
+                                    <p className='text-red-500 px-1'>Email requerido</p>
+                                )
+                            }
                         </div>
 
                         <div className="mb-4">
                             <label htmlFor="password" className="block text-sm font-semibold mb-2">Contraseña</label>
                             <input
-                                id="password"
+                                {...register('password', { required: true })}
                                 className='border-solid border-2 w-full rounded-md px-4 py-2'
                                 type="password"
                                 placeholder='Ingresa tu contraseña'
                             />
+                            {
+                                errors.password && (
+                                    <p className='text-red-500 px-1'>Password requerido</p>
+                                )
+                            }
                         </div>
 
                         <button
