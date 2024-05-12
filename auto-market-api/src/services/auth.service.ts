@@ -3,6 +3,7 @@ import { ResponseContent } from '../utils/response.content';
 import { StatusCodes } from 'http-status-codes';
 import { generateHash, matchPassword } from '../utils/password.bcrypt';
 import { createAccesToken } from "../utils/jwt";
+import jwt from 'jsonwebtoken'
 
 export const registerUser = async (userName: string, email: string, password: string, rol: string) => {
 
@@ -56,7 +57,7 @@ export const loginUser = async (email: string, password: string) => {
                     userName: userFound.userName,
                     rol: userFound.rol
                 })
-            
+
                 ResponseContent.message = `Bienvenid@ al sistema ${userFound.userName}`
                 ResponseContent.status = StatusCodes.OK
                 ResponseContent.error = false
@@ -75,8 +76,42 @@ export const loginUser = async (email: string, password: string) => {
         ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
     }
 
-    return {resultLogin: ResponseContent, token}
+    return { resultLogin: ResponseContent, token }
 }
 
+export const validateTokenUser = async (token: string) => {
+    ResponseContent.error = true
 
-export default registerUser
+    try {
+
+        const user = await new Promise<any>((resolve, reject) => {
+            jwt.verify(token, "secretToken", (err, decode) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(decode)
+                }
+            })
+        })
+
+        const userFound = await User.findById(user.id)
+
+        if (userFound) {
+            ResponseContent.message = {
+                id: userFound._id,
+                userName: userFound.userName,
+                rol: userFound.rol
+            }
+            ResponseContent.status = StatusCodes.OK
+            ResponseContent.error = false
+        } else {
+            ResponseContent.message = 'El usuario no se encontro'
+            ResponseContent.status = StatusCodes.UNAUTHORIZED
+        }
+
+    } catch (error: any) {
+        ResponseContent.message = `Error: ${error.message}`
+    }
+
+    return ResponseContent
+}

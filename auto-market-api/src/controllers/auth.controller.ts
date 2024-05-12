@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import registerUser, { loginUser } from "../services/auth.service";
+import  {registerUser, loginUser, validateTokenUser } from "../services/auth.service";
 import { StatusCodes } from "http-status-codes";
 export const register = async (req: Request, res: Response) => {
     const { userName, email, password, rol } = req.body
@@ -60,5 +60,19 @@ export const logout = async (_req: Request, res: Response) => {
             message: `Error: ${err.message}`,
             error: true
         })
+    }
+}
+
+export const validateToken = async (req: Request, res: Response) => {
+    const { token } = req.cookies
+
+    if (!token) {
+        res.status(StatusCodes.UNAUTHORIZED).json({
+            message: 'No autorizado',
+            error: true
+        })
+    } else {
+        const result = await validateTokenUser(token)
+        res.status(result.status).json(result.message)
     }
 }
