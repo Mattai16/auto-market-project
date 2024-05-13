@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { logoutRequest } from "../api/fetch";
 
 function NavBarUser() {
 
     const { user } = useAuth()
+
+    const onLogout = async() => {
+      const result = await logoutRequest()
+      console.log(result)
+    }
 
     return (
         <nav className="bg-cyan-950 shadow-lg fixed w-full z-10 top-0" >
@@ -14,7 +20,7 @@ function NavBarUser() {
                     </div>
 
                     <div className="flex justify-center">
-                        <ul className="flex space-x-2">
+                        <ul className="flex space-x-2 items-center">
                             {user.rol === 'administrador' &&(
                                 <li>
                                     <Link to="/carro/register" className="text-white hover:bg-gray-500 px-3 py-2 rounded-md text-sm font-medium">REGISTRAR CARRO</Link>
@@ -26,6 +32,11 @@ function NavBarUser() {
                             <li>
                                 <Link to="/login" className="text-white hover:bg-gray-500 px-3 py-2 rounded-md text-sm font-medium uppercase">{user.userName}</Link>
                             </li>
+                            {user &&(
+                                <button onClick={onLogout} className="text-white hover:bg-gray-500 px-3 py-1.5 rounded-md text-sm font-medium">
+                                    LOGOUT
+                                </button>
+                            )}
                         </ul>
                     </div>
                 </div>
