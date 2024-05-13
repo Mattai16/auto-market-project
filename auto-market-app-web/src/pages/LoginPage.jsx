@@ -32,7 +32,7 @@ function LoginPage() {
                     }
                     <form onSubmit={onSubmit}>
                         <div className="mb-4">
-                            <label htmlFor="email" className="block text-sm font-semibold mb-2">Email</label>
+                            <label className="block text-sm font-semibold mb-2">Email</label>
                             <input
                                 {...register('email', { required: true })}
                                 className='border-solid border-2 w-full rounded-md px-4 py-2'
@@ -47,7 +47,7 @@ function LoginPage() {
                         </div>
 
                         <div className="mb-4">
-                            <label htmlFor="password" className="block text-sm font-semibold mb-2">Contraseña</label>
+                            <label className="block text-sm font-semibold mb-2">Contraseña</label>
                             <input
                                 {...register('password', { required: true })}
                                 className='border-solid border-2 w-full rounded-md px-4 py-2'
