@@ -1,5 +1,5 @@
 import React from 'react'
-import CarForm from '../components/CarForm'
+import CarForm from '../components/CarFormPost'
 import NavBarUser from '../components/NavBarUser'
 
 function RegisterCarPage() {

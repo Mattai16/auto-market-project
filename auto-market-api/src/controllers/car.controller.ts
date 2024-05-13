@@ -20,20 +20,20 @@ export const getCars = async (_req: Request, res: Response) => {
 }
 
 export const getCar = async (req: Request, res: Response) => {
-  const idCar = req.params.id
+    const idCar = req.params.id
 
-  if(isValid(idCar)){
-    const result = await getCarById(idCar)
-    res.status(result.status).json({
-        message: result.message,
-        error: result.error
-    })
-  }else{
-    res.status(StatusCodes.BAD_REQUEST).json({
-        message: 'Dato no correcto',
-        error: true
-    })
-  }
+    if (isValid(idCar)) {
+        const result = await getCarById(idCar)
+        res.status(result.status).json({
+            message: result.message,
+            error: result.error
+        })
+    } else {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: 'Dato no correcto',
+            error: true
+        })
+    }
 }
 
 export const postCar = async (req: Request, res: Response) => {
@@ -44,9 +44,9 @@ export const postCar = async (req: Request, res: Response) => {
         const imagen = req.file
 
         const imagenRedimensionada = await sharp(imagen?.buffer)
-        .resize({ width: 200 })
-        .jpeg({ quality: 90 })
-        .toBuffer();
+            .resize({ width: 300 })
+            .jpeg({ quality: 100 })
+            .toBuffer();
 
 
         const imagenBase64 = imagenRedimensionada.toString('base64');
@@ -73,7 +73,7 @@ export const postCar = async (req: Request, res: Response) => {
             })
         }
 
-    } catch (error:any) {
+    } catch (error: any) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             message: 'Hubo un error al enviar el carro',
             content: `Error:${error.message}`,
@@ -83,20 +83,57 @@ export const postCar = async (req: Request, res: Response) => {
 }
 
 export const putCar = async (req: Request, res: Response) => {
-    const carData: any = req.body
-    const idCar = req.params.id
-    if (Object.keys(carData).length !== 0 && isValid(idCar)) {
-        const result = await editCarById(idCar, carData)
-        res.status(result.status).json({
-            message: result.message,
-            error: result.error
-        })
-    } else {
-        res.status(StatusCodes.BAD_REQUEST).json({
-            message: 'No se enviaron los datos',
+
+    try {
+        const imagen = req.file
+        const carData: any = req.body
+        const idCar = req.params.id
+        let imagenBase64 = null
+
+        if (imagen) {
+            const imagenRedimensionada = await sharp(imagen?.buffer)
+                .resize({ width: 300 })
+                .jpeg({ quality: 100 })
+                .toBuffer();
+
+            imagenBase64 = imagenRedimensionada.toString('base64');
+        }else{
+            imagenBase64 = 'no update'
+        }
+
+
+
+        if (imagenBase64) {
+
+            if (Object.keys(carData).length !== 0 && isValid(idCar)) {
+                const result = await editCarById(idCar, carData, imagenBase64)
+                res.status(result.status).json({
+                    message: result.message,
+                    error: result.error
+                })
+            } else {
+                res.status(StatusCodes.BAD_REQUEST).json({
+                    message: 'No se enviaron los datos',
+                    error: true
+                })
+            }
+
+        } else {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: 'No se pudo cargar la imagen',
+                error: true
+            })
+        }
+
+
+    } catch (error: any) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: `Error: ${error.message}`,
             error: true
         })
+        console.log(error)
     }
+
 }
 
 export const getCommentsByCar = async (req: Request, res: Response) => {

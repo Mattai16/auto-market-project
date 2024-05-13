@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { postDataCar } from '../api/fetch';
 import { useNavigate } from 'react-router-dom';
 
-function CarForm() {
+function CarFormPost() {
 
     const navigate = useNavigate()
     const { setValue, register, handleSubmit, formState: { errors } } = useForm()
@@ -299,4 +299,4 @@ function CarForm() {
     )
 }
 
-export default CarForm
+export default CarFormPost

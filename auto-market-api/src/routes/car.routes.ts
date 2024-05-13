@@ -10,7 +10,6 @@ router.post('/registrar', upload.single('imagen'), postCar)
 router.get('/getCommentsByCar/:id', getCommentsByCar)
 router.delete('/deleteCar/:id', deleteCar)
 router.get('/getCar/:id', getCar)
-router.put('/updateCar/:id', putCar)
-router.put('/updateCar/:id', putCar)
+router.put('/updateCar/:id', upload.single('imagen'), putCar)
 
 export default router

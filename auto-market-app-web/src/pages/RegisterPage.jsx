@@ -1,16 +1,42 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import NavBar from '../components/NavBar'
 import { useForm } from 'react-hook-form'
+import { registerRequest } from '../api/fetch'
 
 function RegisterPage() {
 
-    const { register, handleSubmit, formState: { errors } } = useForm()
+    const {setValue, register, handleSubmit, formState: { errors } } = useForm()
     const [registerErrors, setRegisterErrors] = useState(null)
+    const navigate = useNavigate()
+    
 
     const onSubmit = handleSubmit(async (values) => {
-        
+        const rol = 'cliente'
+        if (values.password === values.passwordConfirm) {
+            try {
+                setValue('rol', rol)
+                console.log(values.rol)
+                const result = await registerRequest(values)
+                console.log(result)
+                navigate('/login')
+            } catch (error) {
+                setRegisterErrors(error.response.data.message)
+            }
+        } else {
+            setRegisterErrors('Las contraseñas no coinciden')
+        }
+
     })
+
+    useEffect(()=> {
+        if(registerErrors != null){
+            const timer = setTimeout(() => {
+              setRegisterErrors(null)
+            }, 3000)
+            return () => clearTimeout(timer)
+        }
+    }, [registerErrors])
 
     return (
         <div>
@@ -18,13 +44,17 @@ function RegisterPage() {
             <div className='flex items-center justify-center drop-shadow-lg mt-20 h-[calc(100vh-150px)]'>
                 <div className='bg-white max-w-md w-full p-8 rounded-md'>
                     <h1 className='font-bold text-3xl mb-6 '>Registro de cuenta</h1>
-
+                    {
+                        <div className='text-red-500 pb-4 text-center'>
+                            {registerErrors}
+                        </div>
+                    }
                     <form onSubmit={onSubmit}>
                         <div className="mb-4">
                             <label className="block text-sm font-semibold mb-2">Nombre de usuario</label>
                             <input
-                                
-                                {...register('userName', {required: true})}
+
+                                {...register('userName', { required: true })}
                                 className='border-solid border-2 w-full rounded-md px-4 py-2'
                                 type="text"
                                 placeholder='Ingresa tu nombre de usuario'
@@ -39,7 +69,7 @@ function RegisterPage() {
                         <div className="mb-4">
                             <label className="block text-sm font-semibold mb-2">Email</label>
                             <input
-                                {...register('email', {required: true})}
+                                {...register('email', { required: true })}
                                 className='border-solid border-2 w-full rounded-md px-4 py-2'
                                 type="email"
                                 placeholder='Ingresa tu email'
@@ -54,7 +84,7 @@ function RegisterPage() {
                         <div className="mb-4">
                             <label className="block text-sm font-semibold mb-2">Contraseña</label>
                             <input
-                                {...register('password', {required: true})}
+                                {...register('password', { required: true })}
                                 className='border-solid border-2 w-full rounded-md px-4 py-2'
                                 type="password"
                                 placeholder='Ingresa tu contraseña'
@@ -69,7 +99,7 @@ function RegisterPage() {
                         <div className="mb-4">
                             <label className="block text-sm font-semibold mb-2">Confirmar contraseña</label>
                             <input
-                                {...register('passwordConfirm', {required: true})}
+                                {...register('passwordConfirm', { required: true })}
                                 className='border-solid border-2 w-full rounded-md px-4 py-2'
                                 type="password"
                                 placeholder='Confirma tu contraseña'

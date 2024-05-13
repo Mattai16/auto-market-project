@@ -51,10 +51,10 @@ export const getCarById = async (idCar: string) => {
   try {
 
     if (validateTypeId(idCar)) {
-    
+
       const carFound = await CarModel.findById(idCar)
 
-      if(carFound){
+      if (carFound) {
         ResponseContent.message = carFound
         ResponseContent.status = StatusCodes.OK
         ResponseContent.error = false
@@ -62,15 +62,15 @@ export const getCarById = async (idCar: string) => {
         ResponseContent.message = 'El carro no existe'
         ResponseContent.status = StatusCodes.NOT_FOUND
       }
-      
+
     } else {
       ResponseContent.message = 'El id no es valido'
       ResponseContent.status = StatusCodes.BAD_REQUEST
     }
-    
+
   } catch (error: any) {
     ResponseContent.message = `Error: ${error.message}`
-    ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR    
+    ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
   }
 
   return ResponseContent
@@ -130,9 +130,13 @@ export const getCommentsByIdCar = async (idCar: string) => {
 
 }
 
-export const editCarById = async (idCar: string, carData: Car) => {
+export const editCarById = async (idCar: string, carData: Car, imagenCar: string) => {
 
   ResponseContent.error = true
+
+  if (imagenCar !== 'no update') {
+    carData.image = imagenCar
+  }
 
   if (validateTypeId(idCar)) {
 

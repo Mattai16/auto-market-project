@@ -9,6 +9,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRouter from "./components/ProtectedRouter";
 import HomePageUser from "./pages/HomePageUser";
 import CarPageUser from "./pages/CarPageUser";
+import EditCarPage from "./pages/EditCarPage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/home" element={<HomePageUser />} />
             <Route path="/carro/register" element={<RegisterCarPage />} />
             <Route path="/home/carro/:id" element={<CarPageUser />} />
+            <Route path="/home/carroEdit/:id" element={<EditCarPage />} />
           </Route>
 
         </Routes>
