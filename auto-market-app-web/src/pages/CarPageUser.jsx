@@ -5,6 +5,7 @@ import CommentCard from '../components/CommentCard';
 import { useParams } from 'react-router-dom';
 import { getCar, getCommentsByCar } from '../api/fetch';
 import NavBarUser from '../components/NavBarUser';
+import { useAuth } from '../context/AuthContext';
 
 async function loadCar(id) {
     const data = await getCar(id)
@@ -21,7 +22,7 @@ async function loadComments(id) {
 function CarPageUser() {
 
     const { id } = useParams()
-
+    const { user } = useAuth()
     const [car, setCar] = useState()
     const [comments, setComments] = useState()
 
@@ -42,6 +43,7 @@ function CarPageUser() {
     }, [id])
 
 
+
     return (
         <div>
             <NavBarUser />
@@ -54,7 +56,7 @@ function CarPageUser() {
                 <div className="flex-1 flex justify-start">
                     <div className="h-full w-[450px]">
                         <div className='w-full'>
-                            <CommentBox />
+                            <CommentBox idUser={user.id} idCar={id} />
                             {comments && comments.length > 0 ? (
                                 comments.map(comment => (
                                     <CommentCard comment={comment} key={comment._id} />

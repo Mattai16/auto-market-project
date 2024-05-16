@@ -54,13 +54,13 @@ function CarPage() {
                 <div className="flex-1 flex justify-start">
                     <div className="h-full w-[450px]">
                         <div className='w-full'>
-                                <Link to='/login'>
-                            <div className="flex mt-10">
+                            <Link to='/login'>
+                                <div className="flex mt-10">
                                     <label
                                         className="text-white bg-cyan-950 text-center flex-1 h-10 p-2 rounded-md resize-none mr-2 hover:bg-gray-800 cursor-pointer"
                                     >Inicia sesión para hacer cometarios</label>
-                            </div>
-                                </Link>
+                                </div>
+                            </Link>
                             {comments && comments.length > 0 ? (
                                 comments.map(comment => (
                                     <CommentCard comment={comment} key={comment._id} />
