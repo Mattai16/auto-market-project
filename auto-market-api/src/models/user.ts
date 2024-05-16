@@ -22,7 +22,7 @@ const userSchema = new Schema<User>({
     rol: {
         type: String,
         enum: ["administrador", "cliente"],
-        required: true
+        
     }
 })
 

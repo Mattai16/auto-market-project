@@ -21,16 +21,34 @@ export const registerUser = async (userName: string, email: string, password: st
             rol
         })
 
-        const userSaved = await newUser.save()
+        const userEmailFound = await User.findOne({ email: email })
 
-        if (userSaved.userName != undefined) {
-            ResponseContent.message = `¡El usuario ${userSaved.userName} ha sido registrado!`
-            ResponseContent.status = StatusCodes.CREATED
-            ResponseContent.error = false
+        if (!userEmailFound) {
+
+            const userNameFound = await User.findOne({ userName: userName })
+
+            if (!userNameFound) {
+
+                const userSaved = await newUser.save()
+
+                if (userSaved.userName != undefined) {
+                    ResponseContent.message = `¡El usuario ${userSaved.userName} ha sido registrado!`
+                    ResponseContent.status = StatusCodes.CREATED
+                    ResponseContent.error = false
+
+                } else {
+                    ResponseContent.message = `El usuario no se ha podido registrar`
+                    ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
+                }
+
+            }else{
+                ResponseContent.message = `El nombre de usuario ya está registrado`
+                ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
+            }
 
         } else {
-            ResponseContent.message = `El usuario no se ha podido registrar`
-            ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
+            ResponseContent.message = `El email ya está registrado`
+            ResponseContent.status = StatusCodes.BAD_REQUEST
         }
 
     } catch (error: any) {
@@ -111,6 +129,7 @@ export const validateTokenUser = async (token: string) => {
 
     } catch (error: any) {
         ResponseContent.message = `Error: ${error.message}`
+        ResponseContent.status = StatusCodes.INTERNAL_SERVER_ERROR
     }
 
     return ResponseContent
