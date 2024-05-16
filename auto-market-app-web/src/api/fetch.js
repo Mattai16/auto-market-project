@@ -7,7 +7,7 @@ export const getCommentsByCar = (id) => axios.get(`/carros/getCommentsByCar/${id
 export const loginRequest = (user) => axios.post('/login', user)
 export const registerRequest = (user) => axios.post('/registrarse', user)
 export const logoutRequest = () => axios.post('/logout')
-
+export const deleteCar = (id) => axios.delete(`/carros/deleteCar/${id}`)
 export const postDataCar = (formdata) => {
   return axios.post('/carros/registrar', formdata, {
     headers: {

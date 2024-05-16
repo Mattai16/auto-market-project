@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import defaultImage from '../assets/preview.png';
 import { useForm } from 'react-hook-form';
-import { putDataCar } from '../api/fetch';
+import { deleteCar, putDataCar } from '../api/fetch';
 import { useNavigate } from 'react-router-dom';
 
 function CarFormEdit({ car }) {
@@ -56,6 +56,24 @@ function CarFormEdit({ car }) {
         setLoadValues(true)
     }
 
+    const onEliminar = async () => {
+
+        const confirm = window.confirm('¿Estás seguro de eliminar el carro?')
+
+        if(confirm){
+        await deleteCar(car._id)
+            .then(response => {
+                console.log(response.data.message)
+                navigate('/home')
+            })
+            .catch(error =>{
+                console.log(error.response.data.message)
+            })
+        }else{
+            setPostErrors('La eliminación ha sido cancelada')
+        }
+    }
+
     const handleImgChange = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -104,7 +122,7 @@ function CarFormEdit({ car }) {
         formData.append('imagen', values.imagen)
         formData.append('description', values.description)
         formData.append('engineCapacity', values.engineCapacity)
-        
+
         await putDataCar(formData, car._id)
             .then(response => {
                 console.log(response.data.message)
@@ -384,6 +402,7 @@ function CarFormEdit({ car }) {
                             readOnly && (
 
                                 <button
+                                    onClick={onEliminar}
                                     className='bg-red-600 hover:bg-red-600 text-white w-full py-2 mb-5 rounded-md'>
                                     Eliminar
                                 </button>
