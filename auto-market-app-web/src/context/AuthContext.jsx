@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { loginRequest, validateToken } from "../api/fetch";
+import { getCommentsByCar, loginRequest, validateToken } from "../api/fetch";
 import Cookies from 'js-cookie'
 export const AuthContext = createContext()
 
@@ -28,6 +28,13 @@ export const AuthProvider = ({ children }) => {
       setErros(error.response.data.message)
     }
   }
+
+  const loadComments = async (id) => {
+    const data = await getCommentsByCar(id)
+    const commentsData = data.data.message
+    return commentsData
+  }
+
 
   useEffect(() => {
     if (errors != null) {
@@ -80,7 +87,8 @@ export const AuthProvider = ({ children }) => {
       isAuth,
       errors,
       login,
-      loading
+      loading,
+      loadComments
     }}>
       {children}
     </AuthContext.Provider>

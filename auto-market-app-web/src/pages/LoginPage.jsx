@@ -10,9 +10,9 @@ function LoginPage() {
     const { isAuth, login, errors: AuthErrors } = useAuth()
     const navigate = useNavigate()
 
-    useEffect(() =>{
+    useEffect(() => {
         if (isAuth) navigate('/home')
-    })
+    }, [isAuth, navigate])
 
     const onSubmit = handleSubmit(async (values) => {
         await login(values)

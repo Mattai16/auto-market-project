@@ -13,11 +13,6 @@ async function loadCar(id) {
     return carData
 }
 
-async function loadComments(id) {
-    const data = await getCommentsByCar(id)
-    const commentsData = data.data.message
-    return commentsData
-}
 
 function CarPageUser() {
 
@@ -25,6 +20,7 @@ function CarPageUser() {
     const { user } = useAuth()
     const [car, setCar] = useState()
     const [comments, setComments] = useState()
+    const {loadComments}= useAuth()
 
     useEffect(() => {
         async function fetchData(idCar) {
@@ -40,7 +36,7 @@ function CarPageUser() {
             setComments(comments)
         }
         fetchData(id)
-    }, [id])
+    }, [id, loadComments])
 
 
 

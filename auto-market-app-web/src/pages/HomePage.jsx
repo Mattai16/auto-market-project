@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import NavBar from '../components/NavBar'
 import { getCars } from '../api/fetch'
 import CarCard from '../components/CarCArd'
+import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 
 async function loadCars() {
@@ -13,6 +15,12 @@ async function loadCars() {
 function HomePage() {
 
     const [cars, setCars] = useState()
+    const { isAuth } = useAuth()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (isAuth) return navigate('/home')
+    }, [isAuth, navigate])
 
     useEffect(() => {
         async function fetchData() {
@@ -32,7 +40,7 @@ function HomePage() {
                     <CarCard car={car} key={car._id} />
                 ))}
             </main>
-                <p className='w-full mt-10'></p>
+            <p className='w-full mt-10'></p>
         </div>
     )
 }
