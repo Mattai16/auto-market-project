@@ -17,9 +17,9 @@ function ProfileUser() {
             <div className='flex items-center justify-center drop-shadow-lg mt-20 h-[calc(100vh-350px)]'>
 
                 <div className='bg-white max-w-md w-full p-8 rounded-md'>
-                    <h1 className='text-3xl font-bold'>Profile user</h1>
-                    <h1>Nomre de usuario: {user.userName}</h1>
-                    <h1>Email del usuario recuperar del token*</h1>
+                    <h1 className='text-3xl font-bold'>Datos del perfil</h1>
+                    <p className='text-2xl px-4 mt-5'>Nombre de usuario: {user.userName}</p>
+                    <p className='text-2xl px-4'>Correo: {user.email}</p>
 
                     <button 
                         onClick={onLogout}
