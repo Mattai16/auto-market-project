@@ -10,6 +10,7 @@ import ProtectedRouter from "./components/ProtectedRouter";
 import HomePageUser from "./pages/HomePageUser";
 import CarPageUser from "./pages/CarPageUser";
 import EditCarPage from "./pages/EditCarPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/carro/register" element={<RegisterCarPage />} />
             <Route path="/home/carro/:id" element={<CarPageUser />} />
             <Route path="/home/carroEdit/:id" element={<EditCarPage />} />
+            <Route path="/profile/" element={<ProfilePage />} />
           </Route>
 
         </Routes>

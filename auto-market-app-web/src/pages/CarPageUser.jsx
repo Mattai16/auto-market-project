@@ -20,7 +20,7 @@ function CarPageUser() {
     const { user } = useAuth()
     const [car, setCar] = useState()
     const [comments, setComments] = useState()
-    const {loadComments}= useAuth()
+    const { loadComments } = useAuth()
 
     useEffect(() => {
         async function fetchData(idCar) {
