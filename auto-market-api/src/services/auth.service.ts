@@ -119,7 +119,8 @@ export const validateTokenUser = async (token: string) => {
             ResponseContent.message = {
                 id: userFound._id,
                 userName: userFound.userName,
-                rol: userFound.rol
+                rol: userFound.rol,
+                email: userFound.email
             }
             ResponseContent.status = StatusCodes.OK
             ResponseContent.error = false
