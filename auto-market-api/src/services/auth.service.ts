@@ -73,7 +73,8 @@ export const loginUser = async (email: string, password: string) => {
                 token = await createAccesToken({
                     id: userFound._id,
                     userName: userFound.userName,
-                    rol: userFound.rol
+                    rol: userFound.rol,
+                    email: userFound.email
                 })
 
                 ResponseContent.message = `Bienvenid@ al sistema ${userFound.userName}`
