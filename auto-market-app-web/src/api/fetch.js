@@ -9,6 +9,9 @@ export const registerRequest = (user) => axios.post('/registrarse', user)
 export const logoutRequest = () => axios.post('/logout')
 export const deleteCar = (id) => axios.delete(`/carros/deleteCar/${id}`)
 export const postComment = (dataComment) => axios.post('/usuario/comentar', dataComment)
+export const deleteComment = (id) => axios.delete(`/usuario/deleteComment/${id}`)
+
+
 export const postDataCar = (formdata) => {
   return axios.post('/carros/registrar', formdata, {
     headers: {
