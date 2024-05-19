@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { deleteComment, putComment } from '../api/fetch';
+import { toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function CommentCard({ comment }) {
     const { user } = useAuth();
@@ -12,6 +14,18 @@ function CommentCard({ comment }) {
         try {
             const response = await deleteComment(comment._id);
             console.log(response);
+            toast.success('Comentario eliminado!', {
+                position: "bottom-right",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+                });
+
         } catch (error) {
             console.log(error);
             setCommentErrors(error.response.data.message);
@@ -39,6 +53,17 @@ function CommentCard({ comment }) {
             .then(response => {
                 console.log(response)
                 setIsEdit(false);
+                toast.success('El comentario se edito!', {
+                    position: "bottom-right",
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                    });
             }).catch(error => {
                 setCommentErrors(error.response.data.message)
             })
@@ -61,14 +86,14 @@ function CommentCard({ comment }) {
                     {commentErrors}
                 </div>
                 <div>
-                    {user.rol === 'administrador' && (
+                    {user && user.rol === 'administrador' && comment.user !== user.id ? (
                         <button
                             onClick={onEliminar}
                             className="bg-red-500 hover:bg-red-600 text-white py-0.5 px-3 rounded-md">
                             Eliminar
                         </button>
-                    )}
-                    {!isEdit && comment.user === user.id && (
+                    ) : null}
+                    {user && !isEdit && comment.user === user.id && (
                         <>
                             <button
                                 onClick={onEdit}
@@ -82,7 +107,7 @@ function CommentCard({ comment }) {
                             </button>
                         </>
                     )}
-                    {isEdit && comment.user === user.id && (
+                    {user && isEdit && comment.user === user.id && (
                         <>
                             <button
                                 onClick={onSave}

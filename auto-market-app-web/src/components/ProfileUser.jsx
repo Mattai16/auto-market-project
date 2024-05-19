@@ -1,15 +1,30 @@
 import React from 'react'
 import { useAuth } from '../context/AuthContext'
 import { logoutRequest } from '../api/fetch'
-
+import { toast, Bounce } from 'react-toastify'
 function ProfileUser() {
 
 
     const { user } = useAuth()
 
     const onLogout = async () => {
-        const result = await logoutRequest()
-        console.log(result)
+        try {
+            const result = await logoutRequest()
+            console.log(result)
+            toast.success('Sesión cerrada!', {
+                position: "bottom-right",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+                });
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (

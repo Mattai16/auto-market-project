@@ -11,6 +11,7 @@ import HomePageUser from "./pages/HomePageUser";
 import CarPageUser from "./pages/CarPageUser";
 import EditCarPage from "./pages/EditCarPage";
 import ProfilePage from "./pages/ProfilePage";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
           <Route path="/carro/:id" element={<CarPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          <Route element={<ProtectedRouter/>}>
+          <Route element={<ProtectedRouter />}>
             <Route path="/home" element={<HomePageUser />} />
             <Route path="/carro/register" element={<RegisterCarPage />} />
             <Route path="/home/carro/:id" element={<CarPageUser />} />
@@ -32,6 +33,7 @@ function App() {
           </Route>
 
         </Routes>
+        <ToastContainer />
       </BrowserRouter>
     </AuthProvider>
   );

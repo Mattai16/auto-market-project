@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getCommentsByCar, loginRequest, validateToken } from "../api/fetch";
 import Cookies from 'js-cookie'
+import { toast, Bounce } from "react-toastify";
+
 export const AuthContext = createContext()
 
 export const useAuth = () => {
@@ -24,6 +26,17 @@ export const AuthProvider = ({ children }) => {
       console.log(res)
       setIsAuth(true)
       setErros(null)
+      toast.success(res.data.message, {
+        position: "bottom-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
     } catch (error) {
       setErros(error.response.data.message)
     }

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import NavBar from '../components/NavBar'
 import { useForm } from 'react-hook-form'
 import { registerRequest } from '../api/fetch'
+import { toast, Bounce } from 'react-toastify'
 
 function RegisterPage() {
 
@@ -20,6 +21,17 @@ function RegisterPage() {
                 const result = await registerRequest(values)
                 console.log(result)
                 navigate('/login')
+                toast.success('Usuario registrado', {
+                    position: "bottom-right",
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                    });
             } catch (error) {
                 setRegisterErrors(error.response.data.message)
             }

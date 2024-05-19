@@ -3,6 +3,7 @@ import defaultImage from '../assets/preview.png';
 import { useForm } from 'react-hook-form';
 import { postDataCar } from '../api/fetch';
 import { useNavigate } from 'react-router-dom';
+import { toast, Bounce } from 'react-toastify';
 
 function CarFormPost() {
 
@@ -67,7 +68,18 @@ function CarFormPost() {
         postDataCar(formData)
             .then(response => {
                 console.log(response)
-                navigate('/')
+                navigate('/home')
+                toast.success('El carro se registro!', {
+                    position: "bottom-right",
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                    });
             })
             .catch(error => {
                 console.log(error)
